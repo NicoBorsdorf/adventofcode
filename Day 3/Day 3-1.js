@@ -1,4 +1,4 @@
-const { dataDev: data } = require("./data");
+const { data: data } = require("./data");
 
 const result = [];
 
@@ -11,36 +11,33 @@ dataArray.forEach((line, i) => {
 
     const surroundings = [];
 
-    surroundings.push(line[numIndex - 1] ?? []);
-    surroundings.push(line[numIndex + numLength] ?? []);
+    surroundings.push(line[numIndex - 1] ?? "");
+    surroundings.push(line[numIndex + numLength] ?? "");
 
-    /*surroundings.push(
+    surroundings.push(
       dataArray[i - 1]
         ?.split("")
         .slice(
-          numIndex > 0 ? numIndex - 1 : 0,
-          numIndex > 0 ? numIndex + 2 + numLength : numIndex + numLength + 1
+          numIndex > 0 ? numIndex - 1 : numIndex,
+          dataArray.length - numIndex - numLength - 1 > 0
+            ? -(dataArray.length - numIndex - numLength - 1)
+            : undefined
         ) ?? []
-    );*/
+    );
 
     surroundings.push(
       dataArray[i + 1]
         ?.split("")
         .slice(
-          numIndex,
-          dataArray.length >= numIndex + numLength + 1
+          numIndex > 0 ? numIndex - 1 : numIndex,
+          dataArray.length - numIndex - numLength - 1 > 0
             ? -(dataArray.length - numIndex - numLength - 1)
             : undefined
-        )
+        ) ?? []
     );
 
-    console.log(
-      "surroundings",
-      num,
-      numIndex,
-      surroundings,
-      numIndex + numLength + 1
-    );
+    if (surroundings.flat().join("").match(/[^\.]/g)) result.push(Number(num));
+    console.log("surroundings", surroundings.flat().join(""), num);
   });
 });
 
