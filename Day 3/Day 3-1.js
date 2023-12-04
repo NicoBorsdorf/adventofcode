@@ -1,43 +1,43 @@
-const { data: data } = require("./data");
+const { dataDev: data } = require("./data");
 
 const result = [];
 
 const dataArray = data.split(/\n/);
 
 dataArray.forEach((line, i) => {
-  line.match(/\d{1,3}/g)?.forEach((num) => {
-    const numIndex = line.search(new RegExp("[^\\d]" + num + "[^\\d]")) + 1;
+  Array.from(line.matchAll(/\d{1,3}/g)).forEach((match) => {
+    //console.log(match);
+    const num = match[0];
+    const numIndex = match.index;
     const numLength = num.length;
+    //console.log("decons", num, numIndex, numLength);
 
-    const surroundings = [];
+    let surroundings = "";
 
-    surroundings.push(line[numIndex - 1] ?? "");
-    surroundings.push(line[numIndex + numLength] ?? "");
+    for (
+      let j = numIndex > 0 ? numIndex - 1 : 0;
+      j <= numIndex + numLength;
+      j++
+    ) {
+      surroundings += dataArray[i - 1]?.charAt(j) ?? "";
+    }
 
-    surroundings.push(
-      dataArray[i - 1]
-        ?.split("")
-        .slice(
-          numIndex > 0 ? numIndex - 1 : numIndex,
-          dataArray.length - numIndex - numLength - 1 > 0
-            ? -(dataArray.length - numIndex - numLength - 1)
-            : undefined
-        ) ?? []
-    );
+    //surroundings += "\n";
 
-    surroundings.push(
-      dataArray[i + 1]
-        ?.split("")
-        .slice(
-          numIndex > 0 ? numIndex - 1 : numIndex,
-          dataArray.length - numIndex - numLength - 1 > 0
-            ? -(dataArray.length - numIndex - numLength - 1)
-            : undefined
-        ) ?? []
-    );
+    surroundings += line[numIndex - 1] ?? "";
+    //surroundings += num;
+    surroundings += line[numIndex + numLength] ?? "";
 
-    if (surroundings.flat().join("").match(/[^\.]/g)) result.push(Number(num));
-    console.log("surroundings", surroundings.flat().join(""), num);
+    for (
+      let k = numIndex > 0 ? numIndex - 1 : 0;
+      k <= numIndex + numLength;
+      k++
+    ) {
+      surroundings += dataArray[i + 1]?.charAt(k) ?? "";
+    }
+
+    if (surroundings.match(/[^\s\.]/g)) result.push(Number(num));
+    console.log("surroundings", surroundings, num);
   });
 });
 
