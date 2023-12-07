@@ -13,20 +13,21 @@ const getType = (hand) => {
   });
 
   if (hand.match(/J/g))
-    switch (Object.keys(obj).length) {
-      case 5:
-        return types.indexOf("High");
-      case 4:
-        return types.indexOf("One");
-      case 3:
-        if (Object.values(obj).includes(3)) return types.indexOf("Three");
-        return types.indexOf("Two");
-      case 2:
-        if (Object.values(obj).includes(4)) return types.indexOf("Four");
-        return types.indexOf("Full");
-      case 1:
-        return types.indexOf("Five");
-    }
+    Object.entries(obj).sort(([aCard, a], [bCard, b]) => a - b);
+  switch (Object.keys(obj).length) {
+    case 5:
+      return types.indexOf("High");
+    case 4:
+      return types.indexOf("One");
+    case 3:
+      if (Object.values(obj).includes(3)) return types.indexOf("Three");
+      return types.indexOf("Two");
+    case 2:
+      if (Object.values(obj).includes(4)) return types.indexOf("Four");
+      return types.indexOf("Full");
+    case 1:
+      return types.indexOf("Five");
+  }
 };
 
 const result = data
