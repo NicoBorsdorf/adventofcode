@@ -12,8 +12,15 @@ const getType = (hand) => {
     return (obj[char] = 1);
   });
 
-  if (hand.match(/J/g))
-    Object.entries(obj).sort(([aCard, a], [bCard, b]) => a - b);
+  if (hand.match(/J/g)) {
+    const highCard = Object.entries(obj).sort(([aCard, a], [bCard, b]) => {
+      a == b ? (cards.indexOf(aCard) < cards.indexOf(bCard) ? 1 : -1) : a - b;
+    })[0][0];
+    obj[highCard] += obj["J"];
+    delete obj["J"];
+  }
+  console.log(obj);
+
   switch (Object.keys(obj).length) {
     case 5:
       return types.indexOf("High");
