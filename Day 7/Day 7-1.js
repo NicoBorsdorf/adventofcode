@@ -12,20 +12,19 @@ const getType = (hand) => {
     return (obj[char] = 1);
   });
 
-  switch (Object.keys(obj).length) {
-    case 5:
-      return types.indexOf("High");
-    case 4:
-      return types.indexOf("One");
-    case 3:
-      if (Object.values(obj).includes(3)) return types.indexOf("Three");
-      return types.indexOf("Two");
-    case 2:
-      if (Object.values(obj).includes(4)) return types.indexOf("Four");
-      return types.indexOf("Full");
-    case 1:
-      return types.indexOf("Five");
-  }
+  const map = {
+    5: types.indexOf("High"),
+    4: types.indexOf("One"),
+    3: Object.values(obj).includes(3)
+      ? types.indexOf("Three")
+      : types.indexOf("Two"),
+    2: Object.values(obj).includes(4)
+      ? types.indexOf("Four")
+      : types.indexOf("Full"),
+    1: types.indexOf("Five"),
+  };
+
+  return map[Object.keys(obj).length];
 };
 
 const result = data
